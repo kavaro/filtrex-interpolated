@@ -18,4 +18,7 @@ yarn start: watch source files for development, compiles ./src/index.js to ./dis
 yarn build: build for production
 yarn test: watch source files for testing
 yarn coverage: generate coverage report
+yarn publish-patch: publish to npm a patch
+yarn publish-minor: publish minor update to npm
+yarn publish-major: publish major update to npm
 ```
