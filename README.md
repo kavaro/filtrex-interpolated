@@ -4,9 +4,12 @@ Configures a project to create a nodejs library with rollup and jest
 
 ## Installation 
 
+```bash
 git clone https://github.com/kavaro/boilerplate.git project
 cd project
+git remote rm origin
 yarn
+```
 
 ## Usage
 
