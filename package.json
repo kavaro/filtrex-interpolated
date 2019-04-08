@@ -18,7 +18,8 @@
     "clean": "rm -rf dist/*",
     "start": "rollup -w -c rollup.config.dev.js",
     "build": "yarn clean && rollup -c rollup.config.prod.js",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "coverage": "jest --coverage"
   },
   "dependencies": {}
 }
