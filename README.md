@@ -1,3 +1,5 @@
+# Work in progress, use at own risk
+
 # Boilerplate with rollup and jest
 
 Configures a project to create a nodejs library with rollup and jest
