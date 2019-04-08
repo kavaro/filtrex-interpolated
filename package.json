@@ -20,7 +20,9 @@
     "start": "rollup -w -c rollup.config.dev.js",
     "build": "yarn clean && rollup -c rollup.config.prod.js",
     "test": "jest --watchAll",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "preversion": "yarn test",
+    "postversion": "git push --tags && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""
   },
   "dependencies": {}
 }
