@@ -27,5 +27,7 @@
     "publish-major": "yarn version --major",
     "publish-patch": "yarn version --patch"
   },
-  "dependencies": {}
+  "peerDependencies": {
+    "filtrex": "^1.0.0"
+  }
 }

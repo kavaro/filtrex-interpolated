@@ -12,7 +12,9 @@ module.exports = [
       sourcemap: true
     },
     plugins: [
-      resolve(),
+      resolve({
+        modulesOnly: true
+      }),
       babel({
         configFile: './babel.config.js',
         exclude: 'node_modules/**' // only transpile our source code
