@@ -3,6 +3,11 @@
   "version": "0.1.2",
   "main": "dist/index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kavaro/filtrex-interpolated.git"
+  },
+  "author": "Kavaro",
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
