@@ -42,7 +42,7 @@ const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
 expect(compiled(scope)).toBe('Welcome U1') 
 ```
 
-## Changing interpolation expression
+## Changing interpolation regexp
 
 ```js
 import Interpolated from 'filtrex-interpolated'
