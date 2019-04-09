@@ -41,5 +41,3 @@ const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
 })
 expect(compiled(scope)).toBe('Welcome U1') 
 ```
-
-// '{get(names, index, "text")}'
