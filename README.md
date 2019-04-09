@@ -41,3 +41,12 @@ const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
 })
 expect(compiled(scope)).toBe('Welcome U1') 
 ```
+
+## Changing interpolation expression
+
+```js
+import Interpolated from 'filtrex-interpolated'
+Interpolated.INTERPOLATE_REGEXP = /\$\{([^\}]+)\}/g
+const interpolated = new Interpolated('${age}')({age: 52})
+expect(interpolated).toBe(52)
+```

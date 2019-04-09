@@ -5,7 +5,7 @@ export default function Interpolated(interpolated, customExpressions) {
   const strings = []
   const expressions = []
   interpolated
-    .split(INTERPOLATE_REGEXP)
+    .split(Interpolated.INTERPOLATE_REGEXP)
     .map((term, index) => {
       if (index % 2 === 0) {
         strings.push(term)
@@ -28,3 +28,5 @@ export default function Interpolated(interpolated, customExpressions) {
     return result.join('')
   }
 }
+
+Interpolated.INTERPOLATE_REGEXP = INTERPOLATE_REGEXP

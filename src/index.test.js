@@ -40,4 +40,9 @@ describe('Interpolated', () => {
     })
     expect(compiled(scope)).toBe('Welcome U1')
   })
+  it('should use Interpolated.INTERPOLATE_REGEXP', () => {
+    Interpolated.INTERPOLATE_REGEXP = /\$\{([^\}]+)\}/g
+    const interpolated = new Interpolated('${age}')({age: 52})
+    expect(interpolated).toBe(52)
+  })
 })
