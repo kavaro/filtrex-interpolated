@@ -1,7 +1,7 @@
 const { compileExpression } = require('filtrex')
 const INTERPOLATE_REGEXP = /\{([^\}]+)\}/g
 
-export default function Interpolated(interpolated) {
+export default function Interpolated(interpolated, customExpressions) {
   const strings = []
   const expressions = []
   interpolated
@@ -10,7 +10,7 @@ export default function Interpolated(interpolated) {
       if (index % 2 === 0) {
         strings.push(term)
       } else {
-        expressions.push(compileExpression(term))
+        expressions.push(compileExpression(term, customExpressions))
       }
     })
   const lastString = strings.pop()

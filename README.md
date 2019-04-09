@@ -1,26 +1,21 @@
-# Work in progress, use at own risk
+# Filtrex-interpolated
 
-# Boilerplate with rollup and jest
+Interpolate string with filtrex expressions
 
-Configures a project to create a nodejs library with rollup and jest
+# Examples
 
-## Installation 
+## Interpolation
 
-```bash
-git clone https://github.com/kavaro/boilerplate.git project
-cd project
-git remote rm origin
-yarn
+```js
+import {Interpolated} from 'filtrex-interpolated'
+const interpolated = new Interpolated('I am {age} years old')
+expect(interpolated({age: 52})).toBe('I am 52 years old')
 ```
 
-## Usage
+## Expression
 
-```bash
-yarn start: watch source files for development, compiles ./src/index.js to ./dist/index.js
-yarn build: build for production
-yarn test: watch source files for testing
-yarn coverage: generate coverage report
-yarn publish-patch: publish patch update to npm
-yarn publish-minor: publish minor update to npm
-yarn publish-major: publish major update to npm
+```js
+import {Interpolated} from 'filtrex-interpolated'
+const interpolated = new Interpolated('{age + 1}')
+expect(interpolated({age: 52})).toBe(53) // NOTE: a number and not a string
 ```
