@@ -19,3 +19,4 @@ import {Interpolated} from 'filtrex-interpolated'
 const interpolated = new Interpolated('{age + 1}')
 expect(interpolated({age: 52})).toBe(53) // NOTE: a number and not a string
 ```
+
