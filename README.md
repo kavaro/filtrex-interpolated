@@ -1,22 +1,45 @@
 # Filtrex-interpolated
 
-Interpolate string with filtrex expressions
+Interpolate a string with filtrex expressions
 
 # Examples
 
-## Interpolation
+## String Interpolation
 
 ```js
 import {Interpolated} from 'filtrex-interpolated'
-const interpolated = new Interpolated('I am {age} years old')
-expect(interpolated({age: 52})).toBe('I am 52 years old')
+
+const interpolated = new Interpolated('I am {age}')({age: 52})
+expect(interpolated).toBe('I am 52')
 ```
 
-## Expression
+## String expression
 
 ```js
 import {Interpolated} from 'filtrex-interpolated'
-const interpolated = new Interpolated('{age + 1}')
-expect(interpolated({age: 52})).toBe(53) // NOTE: a number and not a string
+
+const interpolated = new Interpolated('{age}')({age: 52})
+expect(interpolated).toBe(52) // NOTE: type is Number and not String
 ```
 
+## Custom expressions
+
+```js
+import {Interpolated} from 'filtrex-interpolated'
+import {get} from 'lodash/object'
+
+const scope = {
+  users: [
+    {name: 'U0'},
+    {name: 'U1'},
+    {name: 'U2'}
+  ],
+  userIndex: 1
+}
+const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
+  get: (src, ...path) => get(src, path)
+})
+expect(compiled(scope)).toBe('Welcome U1') 
+```
+
+// '{get(names, index, "text")}'
