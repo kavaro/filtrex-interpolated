@@ -1,7 +1,31 @@
 const { compileExpression } = require('filtrex')
 const INTERPOLATE_REGEXP = /\{([^\}]+)\}/g
 
-export default function Interpolated(interpolated, customExpressions) {
+export function tag(strings, ...values) {
+  if (!strings.length) {
+    return values[0]
+  }
+  const result = []
+  values.forEach((value, index) => {
+    result.push(strings[index], value)
+  })
+  result.push(strings[strings.length - 1])
+  return result.join('')
+}
+
+export const validate = fn => (strings, ...values) => {
+  for (let i = 0, l = values.length; i < l; i++) {
+    const [validated, returnValue] = fn(values[i], i, values, strings)
+    if (!validated) {
+      return returnValue
+    }
+  }
+  return tag(strings, ...values)
+}
+
+const defaultTag = tag
+
+export default function Interpolated(interpolated, { custom, tag = defaultTag } = {}) {
   const strings = []
   const expressions = []
   interpolated
@@ -10,7 +34,7 @@ export default function Interpolated(interpolated, customExpressions) {
       if (index % 2 === 0) {
         strings.push(term)
       } else {
-        expressions.push(compileExpression(term, customExpressions))
+        expressions.push(compileExpression(term, custom))
       }
     })
   const lastString = strings.pop()
@@ -19,14 +43,10 @@ export default function Interpolated(interpolated, customExpressions) {
   }
   if (expressions.length === 1 && !lastString && !strings[0]) {
     const lastExpression = expressions[0]
-    return scope => lastExpression(scope)
+    return scope => tag([], lastExpression(scope))
   }
-  return scope => {
-    const result = []
-    strings.forEach((string, index) => result.push(string, expressions[index](scope)))
-    result.push(lastString)
-    return result.join('')
-  }
+  strings.push(lastString)
+  return scope => tag(strings, ...expressions.map(expression => expression(scope)))
 }
 
 Interpolated.INTERPOLATE_REGEXP = INTERPOLATE_REGEXP

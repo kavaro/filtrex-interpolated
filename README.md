@@ -1,6 +1,7 @@
 # Filtrex-interpolated
 
 Interpolate a string with filtrex expressions
+Supports custom functions, custom tag functions and validation functions
 
 # Examples
 
@@ -37,9 +38,65 @@ const scope = {
   userIndex: 1
 }
 const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
-  get: (src, ...path) => get(src, path)
+  custom: {
+    get: (src, ...path) => get(src, path)
+  }
 })
 expect(compiled(scope)).toBe('Welcome U1') 
+```
+
+## Using custom tag function
+
+```js
+// import tag -> the default tag function
+import Interpolated, { tag } from 'filtrex-interpolated' 
+
+const interpolated1 = new Interpolated(
+  'collection/{id of doc}',
+  {
+    tag: (strings, ...values) => tag(strings, ...values)
+  }
+)({})
+expect(interpolated1).toBe('collection/')
+```
+
+## Using validation function
+
+```js
+// import validate -> a tag factory that takes a custom validation function as argument
+// The custom validation function is called for every expression value and must return an array with 2 elements
+//  [
+//    boolean: true when validation for value was successful, 
+//    any: interpolation value to return when validation failed
+//  ]
+// The validation function receives the following arguments:
+//  validate(value, index, values, strings)
+//    - value: value of the current expression
+//    - index: index of the current expression in values array
+//    - values: all expression values
+//    - strings: all strings
+import Interpolated, { tag, validate } from 'filtrex-interpolated'
+
+const interpolated1 = new Interpolated(
+  'collection/{id}',
+  {
+    tag: validate(value => [value !== undefined, undefined])
+  }
+)({})
+// validation failed -> interpolated value = second element in array returned from validate function
+expect(interpolated1).toBe(undefined)  
+
+const interpolated2 = new Interpolated(
+  'collection/{id}',
+  {
+    tag: validate(value => [value !== undefined, undefined]) 
+  }
+)({
+  id: 'my-id'
+})
+// validation success -> second element in array returned from validate function is ignored
+expect(interpolated2).toBe('collection/my-id') 
+
 ```
 
 ## Changing interpolation regexp
