@@ -1,6 +1,6 @@
 {
   "name": "filtrex-interpolated",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": {
@@ -13,6 +13,7 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^24.8.0",
+    "flat": "^4.1.0",
     "jest": "^24.8.0",
     "rollup": "^1.17.0",
     "rollup-plugin-babel": "^4.3.3",
@@ -34,5 +35,6 @@
   },
   "peerDependencies": {
     "filtrex": "^1.0.0"
-  }
+  },
+  "dependencies": {}
 }
