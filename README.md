@@ -1,7 +1,8 @@
 # Filtrex-interpolated
 
 Interpolate a string with filtrex expressions
-Supports custom functions, custom tag functions and validation functions
+
+Supports custom functions, custom getProperty function, custom tag functions and validation function
 
 # Examples
 
@@ -23,7 +24,7 @@ const interpolated = new Interpolated('{age}')({age: 52})
 expect(interpolated).toBe(52) // NOTE: type is Number and not String
 ```
 
-## Custom expressions
+## Custom function (second argument to filtrex)
 
 ```js
 import Interpolated from 'filtrex-interpolated'
@@ -43,6 +44,27 @@ const compiled = new Interpolated('Welcome {get(users, userIndex, "name")}', {
   }
 })
 expect(compiled(scope)).toBe('Welcome U1') 
+```
+
+## Using custom getProperty function (3rd argument to filtrex)
+
+```js
+class Name {
+  constructor(first, last) {
+    this.first = first
+    this.last = last
+  }
+
+  get full() {
+    return this.first + ' ' + this.last
+  }
+}
+
+function getProperty(propertyName, get, object) {
+  return (object instanceof Name) && propertyName === 'full' ? object[propertyName] : get(propertyName)
+}
+const interpolated4 = new Interpolated('{full of name}', { getProperty })({ name: new Name('FIRST', 'LAST') })
+expect(interpolated4).toBe('FIRST LAST')
 ```
 
 ## Using custom tag function

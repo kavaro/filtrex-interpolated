@@ -2,6 +2,17 @@ import Interpolated, { tag, validate } from '.'
 import { get } from 'lodash/object'
 import flat from 'flat'
 
+class Name {
+  constructor(first, last) {
+    this.first = first
+    this.last = last
+  }
+
+  get full() {
+    return this.first + ' ' + this.last
+  }
+}
+
 describe('Interpolated', () => {
   it('should return string when there is no interpolation', () => {
     const interpolated = new Interpolated('Hello')()
@@ -52,8 +63,8 @@ describe('Interpolated', () => {
     expect(interpolated).toBe('ac')
   })
   it('should access object key using of operator', () => {
-    const interpolated = new Interpolated('{(first of name) + " " + (last of name)}')({ name: { first: 'Carla', last: 'Cornelis' } })
-    expect(interpolated).toBe('Carla Cornelis')
+    const interpolated = new Interpolated('{(first of name) + " " + (last of name)}')({ name: { first: 'FIRST', last: 'LAST' } })
+    expect(interpolated).toBe('FIRST LAST')
   })
   it('should not throw when object key does not exist', () => {
     const interpolated1 = new Interpolated(
@@ -83,8 +94,8 @@ describe('Interpolated', () => {
     expect(interpolated3).toBe('collection/my-id')
   })
   it('should create array', () => {
-    const interpolated = new Interpolated("{(first of name, last of name)}")({ name: { first: 'Carla', last: 'Cornelis' } })
-    expect(interpolated).toEqual(['Carla', 'Cornelis'])
+    const interpolated = new Interpolated("{(first of name, last of name)}")({ name: { first: 'FIRST', last: 'LAST' } })
+    expect(interpolated).toEqual(['FIRST', 'LAST'])
   })
   it('should create object', () => {
     const interpolated = new Interpolated(
@@ -99,9 +110,25 @@ describe('Interpolated', () => {
     )()
     expect(interpolated).toEqual({ a: 'A', b: 'B' })
   })
-  it('should use Interpolated.INTERPOLATE_REGEXP', () => {
-    Interpolated.INTERPOLATE_REGEXP = /\$\{([^\}]+)\}/g
-    const interpolated = new Interpolated('${age}')({ age: 52 })
-    expect(interpolated).toBe(52)
+  it ('should only allow access to own property', () => {
+    const name = new Name('FIRST', 'LAST')
+    const interpolated1 = new Interpolated('{full of name}')({ name })
+    expect(interpolated1).toBe(undefined)
+    const interpolated2 = new Interpolated('{first of name} {last of name}')({ name })
+    expect(interpolated2).toBe('FIRST LAST')
+    const interpolated3 = new Interpolated('{constructor of name}')({ name })
+    expect(interpolated3).toBe(undefined)
   })
+  it('should allow to pass prop accessor function to filtrex', () => {
+    function getProperty(propertyName, get, object) {
+      return (object instanceof Name) && propertyName === 'full' ? object[propertyName] : get(propertyName)
+    }
+    const interpolated4 = new Interpolated('{full of name}', { getProperty })({ name: new Name('FIRST', 'LAST') })
+    expect(interpolated4).toBe('FIRST LAST')
+  })
+    it('should use Interpolated.INTERPOLATE_REGEXP', () => {
+      Interpolated.INTERPOLATE_REGEXP = /\$\{([^\}]+)\}/g
+      const interpolated = new Interpolated('${age}')({ age: 52 })
+      expect(interpolated).toBe(52)
+    })
 })

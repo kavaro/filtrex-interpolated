@@ -25,7 +25,7 @@ export const validate = fn => (strings, ...values) => {
 
 const defaultTag = tag
 
-export default function Interpolated(interpolated, { custom, tag = defaultTag } = {}) {
+export default function Interpolated(interpolated, { custom, getProperty, tag = defaultTag } = {}) {
   const strings = []
   const expressions = []
   interpolated
@@ -34,7 +34,7 @@ export default function Interpolated(interpolated, { custom, tag = defaultTag } 
       if (index % 2 === 0) {
         strings.push(term)
       } else {
-        expressions.push(compileExpression(term, custom))
+        expressions.push(compileExpression(term, custom, getProperty))
       }
     })
   const lastString = strings.pop()
